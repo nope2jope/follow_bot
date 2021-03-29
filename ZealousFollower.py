@@ -3,7 +3,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 
 
-class ZealBot():
+class ZealBot:
     def __init__(self, email, password, driver_path):
         self.user_email = email
         self.user_password = password
@@ -36,24 +36,34 @@ class ZealBot():
 
 
     def monkey_do(self):
+
         driver = self.driver
-        main_handle = driver.current_window_handle
 
         followers_link = driver.find_element_by_partial_link_text('followers')
         followers_link.click()
 
-        time.sleep(5)
+        time.sleep(2)
 
-        pop_up_handle = driver.current_window_handle
+        counter = 0
+        follower_window = driver.find_element_by_xpath('//div[@class="isgrP"]')
 
-        while pop_up_handle:
+        while counter < 60:
+            driver.execute_script('arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;',
+                                  follower_window)
+            time.sleep(1)
+            counter += 1
 
-            followers_list = driver.find_elements_by_link_text('Follow')
+        follow_buttons = driver.find_elements_by_css_selector('li button')
 
-            for follower in followers_list:
-                follower.click()
+        for button in follow_buttons:
+            if button.text == 'Follow':
+                button.click()
                 time.sleep(2)
+            else:
+                pass
 
-driver = webdriver.Chrome('/Users/Jope/development/chromedriver')
+        time.sleep(10)
 
-driver.get('https://google.com')
+        driver.close()
+
+
