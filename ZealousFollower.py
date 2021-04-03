@@ -2,17 +2,19 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 
-
 class ZealBot:
     def __init__(self, email, password, driver_path):
         self.user_email = email
         self.user_password = password
         self.driver = webdriver.Chrome(driver_path)
-
+        
+        
+    # this function logs into instagram and locates a desired user
     def monkey_see(self, url, email, password, user):
         driver = self.driver
         driver.get(url)
-
+        
+        # time.sleep improves likelihood of driver finding elements
         time.sleep(5)
 
         email_field = driver.find_element_by_xpath('//input[@name="username"]')
@@ -28,17 +30,19 @@ class ZealBot:
         search_box.send_keys(user)
 
         time.sleep(2)
-
+        
+        # sending RETURN here helps avoid finding, clicking a search button
         search_box.send_keys(Keys.RETURN)
         search_box.send_keys(Keys.RETURN)
 
         time.sleep(5)
 
-
+    # picking up where the previous left of, this function automates following user's followers
     def monkey_do(self):
 
         driver = self.driver
-
+        
+        # open followers window
         followers_link = driver.find_element_by_partial_link_text('followers')
         followers_link.click()
 
@@ -47,9 +51,11 @@ class ZealBot:
         counter = 0
         follower_window = driver.find_element_by_xpath('//div[@class="isgrP"]')
 
+        # scrolls down to bottom of followers window, assuming sixty downward scrolls brings full view
         while counter < 60:
             driver.execute_script('arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;',
                                   follower_window)
+            # sleeping here gives the driver some breathing room
             time.sleep(1)
             counter += 1
 
@@ -58,10 +64,13 @@ class ZealBot:
         for button in follow_buttons:
             if button.text == 'Follow':
                 button.click()
-                time.sleep(2)
+                # sleeping helps to appear a little more human
+                time.sleep(3)
             else:
+                # prevents clicking on an account bot's presently following
                 pass
-
+        
+        # admire what your hubris has wrought 
         time.sleep(10)
 
         driver.close()
