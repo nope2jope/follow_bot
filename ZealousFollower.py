@@ -37,7 +37,7 @@ class ZealBot:
 
         time.sleep(5)
 
-    # picking up where the previous left of, this function automates following user's followers
+    # picking up where the previous left off, this function automates following user's followers
     def monkey_do(self):
 
         driver = self.driver
