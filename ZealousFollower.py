@@ -68,7 +68,7 @@ class ZealBot:
                 time.sleep(3)
             else:
                 # prevents clicking on an account bot's presently following
-                pass
+                continue
         
         # admire what your hubris has wrought 
         time.sleep(10)
